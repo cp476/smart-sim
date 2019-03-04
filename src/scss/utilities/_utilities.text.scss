@@ -1,0 +1,55 @@
+$text-align: center right left;
+
+@each $align in $text-align {
+  @include utility(text-#{$align}) {
+    text-align: $align;
+  }
+}
+
+$fonts: (
+  body: $font-family-body,
+  header: $font-family-header
+);
+
+@each $font, $font-var in $fonts {
+  @include utility(text-#{$font}) {
+    font-family: $font-var;
+  }
+}
+
+$weights: (
+  light: $font-regular,
+  regular: $font-semi-bold,
+  bold: $font-bold
+);
+
+@each $weight, $weight-var in $weights {
+  @include utility(text-#{$weight}) {
+    font-weight: $weight-var;
+  }
+}
+
+@include utility(uppercase) {
+  letter-spacing: .05rem;
+  text-transform: uppercase;
+}
+
+@include utility(text-overflow) {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@include utility(list-reset) {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+@each $size, $size-var in $sizes {
+  @include utility(text-#{$size}) {
+    font-size: $size-var;
+  }
+}

@@ -1,0 +1,13 @@
+@each $color, $color-var in $colors {
+  @include utility(bg\:hover-#{$color}) {
+    &:hover {
+      background-color: $color-var !important;
+    }
+  }
+
+  @include utility(text\:hover-#{$color}) {
+    &:hover {
+      color: $color-var !important;
+    }
+  }
+}

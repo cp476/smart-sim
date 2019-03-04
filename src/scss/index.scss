@@ -1,0 +1,36 @@
+// Reference https://www.xfive.co/blog/itcss-scalable-maintainable-css-architecture/ we use the top 3 peices of the ITCSS architecture
+
+// SETTINGS
+@import './settings/settings.variables';
+
+// TOOLS
+@import './tools/tools.bem';
+@import './tools/tools.utility';
+@import './tools/tools.responsive';
+
+// GENERIC
+@import './generic/generic.grid';
+@import './generic/generic.base';
+@import './generic/generic.animation';
+@import './generic/generic.tooltip';
+
+// ELEMENTS
+@import './elements/elements.typography';
+
+// UTILITIES
+@import './utilities/utilities.general';
+@import './utilities/utilities.spacing';
+@import './utilities/utilities.text';
+@import './utilities/utilities.cursor';
+@import './utilities/utilities.shadows';
+@import './utilities/utilities.layers';
+@import './utilities/utilities.displays';
+@import './utilities/utilities.font-size';
+@import './utilities/utilities.flex';
+@import './utilities/utilities.borders';
+@import './utilities/utilities.colors';
+@import './utilities/utilities.hover';
+@import './utilities/utilities.radius';
+@import './utilities/utilities.positions';
+@import './utilities/utilities.overflow';
+@import './utilities/utilities.size';

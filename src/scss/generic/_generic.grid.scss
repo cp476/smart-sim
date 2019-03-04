@@ -1,0 +1,63 @@
+$_auth-container: 26rem;
+
+@include component(container) {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: $g-extra-large;
+    padding-left: $grid-space;
+    padding-right: $grid-space;
+
+    @include option(large) {
+        max-width: $g-medium;
+    }
+
+    @include option(medium) {
+        max-width: $g-medium;
+    }
+
+    @include option(small) {
+        max-width: $g-small;
+    }
+
+    @include option(auth) {
+        max-width: $_auth-container;
+    }
+
+    @include option(fluid) {
+        max-width: 100%;
+    }
+}
+
+@include component(grid) {
+    display: grid;
+    grid-gap: $grid-space;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+
+    @include option(no-gap) {
+        grid-gap: 0;
+    }
+
+    @include option(reverse) {
+        direction: rtl;
+    }
+}
+
+@each $column in (1 2 3 4 5 6 7 8 9 10 11 12) {
+    @if $column != 12 {
+        @include component(col-#{$column}) {
+            grid-column: span $column;
+
+            @include tablet {
+                grid-column: span 6;
+            }
+
+            @include mobile {
+                grid-column: span 12;
+            }
+        }
+    } @else {
+        @include component(col-#{$column}) {
+            grid-column: span $column;
+        }
+    }
+}

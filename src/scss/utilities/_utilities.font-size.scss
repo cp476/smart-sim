@@ -1,0 +1,5 @@
+@each $size, $size-var in $sizes {
+  @include utility(font-size-#{$size}) {
+    font-size: $size-var;
+  }
+}

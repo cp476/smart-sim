@@ -1,0 +1,6 @@
+$cursors: (text not-allowed move help pointer default);
+@each $cursor in $cursors {
+  @include utility(cursor-#{$cursor}) {
+    cursor: $cursor;
+  }
+}

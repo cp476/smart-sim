@@ -1,0 +1,5 @@
+@each $size, $size-var in $sizes {
+  @include utility(radius-#{$size}) {
+    border-radius: $size-var;
+  }
+}

@@ -1,0 +1,15 @@
+@each $property, $property-var in $properties {
+  @each $direction, $direction-var in $directions {
+    @each $spacer, $spacer-var in $sizes {
+      @if $direction == none {
+        @include utility(#{$property}-#{$spacer}) {
+          #{$property-var}: $spacer-var;
+        }
+      } @else {
+        @include utility(#{$property}-#{$direction}-#{$spacer}) {
+          #{$property-var}-#{$direction-var}: $spacer-var;
+        }
+      }
+    }
+  }
+}

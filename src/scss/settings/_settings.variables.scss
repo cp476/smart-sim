@@ -1,0 +1,221 @@
+/*
+  Disable stylelint to avoid collisions with no-hex rule
+*/
+
+/* stylelint-disable */
+
+// SIZES
+$xxs-unit: 0.25rem;
+$xs-unit: 0.5rem;
+$sm-unit: 0.75rem;
+$base-unit: 0.875rem;
+$md-unit: 1rem;
+$lg-unit: 1.5rem;
+$xl-unit: 2rem;
+$xxl-unit: 3rem;
+
+// GRID
+$grid-space: 0.9375rem;
+$g-extra-small: 0;
+$g-small: 34rem;
+$g-medium: 48rem;
+$g-large: 62rem;
+$g-extra-large: 75rem;
+
+// APP COLOURS
+$primary: #0094d2;
+$primary-light: lighten($primary, 5%);
+$primary-lightest: lighten($primary, 10%);
+$primary-dark: darken($primary, 5%);
+$primary-darkest: darken($primary, 10%);
+
+// SHADES
+$white: #fff;
+$grey-0: #f8f9fa;
+$grey-1: #f1f3f5;
+$grey-2: #e9ecef;
+$grey-3: #dee2e6;
+$grey-4: #adb5bd;
+$grey-5: #868e96;
+$grey-6: #495057;
+$grey-7: #343a40;
+$grey-8: #212529;
+$grey-9: #191d20;
+$grey-10: #090c0e;
+$black: #000;
+
+// REDS
+$red-0: #fff5f5;
+$red-1: #ffe3e3;
+$red-2: #ffc9c9;
+$red-3: #ffa8a8;
+$red-4: #ff8787;
+$red-5: #ff6b6b;
+$red-6: #fa5252;
+$red-7: #f03e3e;
+$red-8: #e03131;
+$red-9: #c92a2a;
+
+// ORANGES
+$orange-0: #fff4e6;
+$orange-1: #ffe8cc;
+$orange-2: #ffd8a8;
+$orange-3: #ffc078;
+$orange-4: #ffa94d;
+$orange-5: #ff922b;
+$orange-6: #fd7e14;
+$orange-7: #f76707;
+$orange-8: #e8590c;
+$orange-9: #d9480f;
+
+// YELLOWS
+$yellow-0: #fff9db;
+$yellow-1: #fff3bf;
+$yellow-2: #ffec99;
+$yellow-3: #ffe066;
+$yellow-4: #ffd43b;
+$yellow-5: #fcc419;
+$yellow-6: #fab005;
+$yellow-7: #f59f00;
+$yellow-8: #f08c00;
+$yellow-9: #e67700;
+
+// GREENS
+$green-0: #ebfbee;
+$green-1: #d3f9d8;
+$green-2: #b2f2bb;
+$green-3: #8ce99a;
+$green-4: #69db7c;
+$green-5: #51cf66;
+$green-6: #40c057;
+$green-7: #37b24d;
+$green-8: #2f9e44;
+$green-9: #2b8a3e;
+
+// ZLAYERS
+$z-one: 1;
+$z-two: 2;
+$z-three: 3;
+$z-four: 4;
+$z-five: 5;
+
+// ELEVATION
+$elevation-1: 0 2px 2px 0 rgba($grey-8, 0.02), 0 1px 5px 0 rgba($grey-8, 0.04), 0 3px 1px -2px rgba($grey-8, 0.1);
+$elevation-2: 0 4px 5px 0 rgba($grey-8, 0.02), 0 1px 10px 0 rgba($grey-8, 0.04), 0 2px 4px -1px rgba($grey-8, 0.1);
+$elevation-3: 0 6px 10px 0 rgba($grey-8, 0.02), 0 1px 18px 0 rgba($grey-8, 0.04), 0 3px 5px -1px rgba($grey-8, 0.1);
+$elevation-4: 0 6px 10px 0 rgba($grey-8, 0.02), 0 1px 18px 0 rgba($grey-8, 0.04), 0 3px 5px -2px rgba($grey-8, 0.1);
+$elevation-5: 0 16px 24px 2px rgba($grey-8, 0.02), 0 6px 30px 5px rgba($grey-8, 0.04),
+    0 8px 10px -5px rgba($grey-8, 0.1);
+
+// FONT STACK
+$font-family-body: 'proxima-nova', sans-serif;
+$font-family-header: 'proxima-nova', sans-serif;
+$font-family-icons: 'Material Icons';
+
+$font-regular: 400;
+$font-semi-bold: 600;
+$font-bold: 700;
+
+// TYPOGRAPHY
+$font-size-body: $md-unit;
+
+$font-size-h1: $xxl-unit;
+$font-size-h2: $xl-unit;
+$font-size-h3: 1.75rem;
+$font-size-h4: $lg-unit;
+$font-size-h5: 1.25rem;
+$font-size-h6: $md-unit;
+
+$headings-font-family: $font-family-header;
+$headings-font-weight: 400;
+$headings-line-height: 1.1;
+$headings-color: inherit;
+
+// MAPS
+$directions: (
+    none: 0,
+    t: top,
+    l: left,
+    b: bottom,
+    r: right
+);
+
+$properties: (
+    pd: padding,
+    mg: margin
+);
+
+$sizes: (
+    0: 0,
+    xxs: $xxs-unit,
+    xs: $xs-unit,
+    sm: $sm-unit,
+    base: $base-unit,
+    md: $md-unit,
+    lg: $lg-unit,
+    xl: $xl-unit,
+    xxl: $xxl-unit
+);
+
+$colors: (
+    primary: $primary,
+    primary-light: $primary-light,
+    primary-lightest: $primary-lightest,
+    primary-dark: $primary,
+    primary-darkest: $primary,
+    'white': $white,
+    grey-0: $grey-0,
+    grey-1: $grey-1,
+    grey-2: $grey-2,
+    grey-3: $grey-3,
+    grey-4: $grey-4,
+    grey-5: $grey-5,
+    grey-6: $grey-6,
+    grey-7: $grey-7,
+    grey-8: $grey-8,
+    grey-9: $grey-9,
+    grey-10: $grey-10,
+    'black': $black,
+    red-0: $red-0,
+    red-1: $red-1,
+    red-2: $red-2,
+    red-3: $red-3,
+    red-4: $red-4,
+    red-5: $red-5,
+    red-6: $red-6,
+    red-7: $red-7,
+    red-8: $red-8,
+    red-9: $red-9,
+    orange-0: $orange-0,
+    orange-1: $orange-1,
+    orange-2: $orange-2,
+    orange-3: $orange-3,
+    orange-4: $orange-4,
+    orange-5: $orange-5,
+    orange-6: $orange-6,
+    orange-7: $orange-7,
+    orange-8: $orange-8,
+    orange-9: $orange-9,
+    yellow-0: $yellow-0,
+    yellow-1: $yellow-1,
+    yellow-2: $yellow-2,
+    yellow-3: $yellow-3,
+    yellow-4: $yellow-4,
+    yellow-5: $yellow-5,
+    yellow-6: $yellow-6,
+    yellow-7: $yellow-7,
+    yellow-8: $yellow-8,
+    yellow-9: $yellow-9,
+    green-0: $green-0,
+    green-1: $green-1,
+    green-2: $green-2,
+    green-3: $green-3,
+    green-4: $green-4,
+    green-5: $green-5,
+    green-6: $green-6,
+    green-7: $green-7,
+    green-8: $green-8,
+    green-9: $green-9
+);
+
+/* stylelint-enable */

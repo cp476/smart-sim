@@ -1,0 +1,17 @@
+@mixin component($block) {
+    .#{$block} {
+        @content;
+    }
+}
+
+@mixin part($element) {
+    &__#{$element} {
+        @content;
+    }
+}
+
+@mixin option($mod) {
+    &.--#{$mod} {
+        @content;
+    }
+}

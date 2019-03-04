@@ -1,0 +1,16 @@
+$overflows: hidden auto scroll;
+$sides: x y none;
+
+@each $overflow in $overflows {
+  @each $side in $sides {
+    @if $side == 'none' {
+      @include utility(overflow-#{$overflow}) {
+        overflow: $overflow;
+      }
+    } @else {
+      @include utility(overflow-#{$side}-#{$overflow}) {
+        overflow-#{$side}: $overflow;
+      }
+    }
+  }
+}

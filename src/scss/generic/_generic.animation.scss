@@ -1,0 +1,113 @@
+$_timing: 210ms;
+$_easing: ease-in-out;
+
+.drop-down-enter-active {
+    animation: dropdown $_timing $_easing;
+}
+
+.drop-down-leave-active {
+    animation: dropdown $_timing $_easing reverse;
+}
+
+.page-transition-enter-active {
+    animation: fade 300ms ease-in;
+}
+
+.page-transition-leave-active {
+    animation: fade 50ms ease-out reverse;
+}
+
+.fade-enter-active {
+    animation: fade $_timing $_easing;
+}
+
+.fade-leave-active {
+    animation: fade $_timing $_easing reverse;
+}
+
+.fade-left-enter-active {
+    animation: fade-left $_timing $_easing;
+}
+
+.fade-left-leave-active {
+    animation: fade-left $_timing $_easing reverse;
+}
+
+.modal-enter-active {
+    animation: modal $_timing $_easing;
+}
+
+.modal-leave-active {
+    animation: modal $_timing $_easing reverse;
+}
+
+.card-loader {
+    &::after {
+        animation: card-loader 1000ms linear infinite;
+        background: linear-gradient(to right, transparent, rgba($grey-4, .15), transparent);
+        bottom: 0;
+        content: '';
+        height: 100%;
+        position: absolute;
+        top: 0;
+        width: 250px;
+    }
+}
+
+@keyframes card-loader {
+    from {
+        left: -250px;
+        opacity: 1;
+    }
+
+    to {
+        left: 100%;
+        opacity: 0;
+    }
+}
+
+@keyframes fade {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fade-left {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes dropdown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes modal {
+    from {
+        opacity: 0;
+        transform: scale(1.1);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}

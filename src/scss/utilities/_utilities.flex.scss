@@ -1,0 +1,47 @@
+$flex: (none 1 2 3 4 5 6);
+@each $item in $flex {
+  @include utility(flex-#{$item}) {
+    flex: $item;
+  }
+}
+
+$justify-content: (flex-start flex-end center space-between space-around);
+@each $item in $justify-content {
+  @include utility(justify-content-#{$item}) {
+    justify-content: $item;
+  }
+}
+
+$align-items: (stretch center flex-start flex-end baseline);
+@each $item in $align-items {
+  @include utility(align-items-#{$item}) {
+    align-items: $item;
+  }
+}
+
+$align-self: (auto stretch center flex-start flex-end baseline);
+@each $item in $align-self {
+  @include utility(align-self-#{$item}) {
+    align-self: $item;
+  }
+}
+
+$flex-direction: (row row-reverse column column-reverse);
+@each $item in $flex-direction {
+  @include utility(flex-direction-#{$item}) {
+    flex-direction: $item;
+  }
+}
+
+$flex-wrap: (nowrap wrap wrap-reverse);
+@each $item in $flex-wrap {
+  @include utility(flex-wrap-#{$item}) {
+    flex-wrap: $item;
+  }
+}
+
+@each $direction, $direction-var in $directions {
+  @include utility(mg-#{$direction}-auto) {
+    margin-#{$direction-var}: auto;
+  }
+}

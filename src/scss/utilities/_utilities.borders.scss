@@ -1,0 +1,21 @@
+@each $direction, $direction-var in $directions {
+  @each $color, $color-var in $colors {
+    @if $direction == none {
+      @include utility(border-#{$color}) {
+        border: 1px solid $color-var;
+      }
+
+      @include utility(border-2-#{$color}) {
+        border: 2px solid $color-var;
+      }
+    } @else {
+      @include utility(border-#{$direction}-#{$color}) {
+        border-#{$direction-var}: 1px solid $color-var;
+      }
+
+      @include utility(border-2-#{$direction}-#{$color}) {
+        border-#{$direction-var}: 2px solid $color-var;
+      }
+    }
+  }
+}

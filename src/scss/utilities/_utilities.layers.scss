@@ -1,0 +1,6 @@
+$layers: $z-one $z-two $z-three $z-four $z-five;
+@each $layer in $layers {
+  @include utility(z-#{$layer}) {
+    z-index: $layer;
+  }
+}

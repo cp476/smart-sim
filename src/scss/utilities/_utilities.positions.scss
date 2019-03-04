@@ -1,0 +1,17 @@
+$positions: static relative fixed absolute sticky;
+
+@each $position in $positions {
+  @include utility(#{$position}) {
+    position: $position;
+  }
+}
+
+@each $size, $size-var in $sizes {
+  @each $direction, $direction-var in $directions {
+    @if $direction != 'none' {
+      @include utility(pin-#{$direction-var}-#{$size}) {
+        #{$direction-var}: $size-var;
+      }
+    }
+  }
+}

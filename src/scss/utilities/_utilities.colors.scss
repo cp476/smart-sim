@@ -1,0 +1,9 @@
+@each $color, $color-var in $colors {
+  @include utility(bg-#{$color}) {
+    background-color: $color-var;
+  }
+
+  @include utility(text-#{$color}) {
+    color: $color-var;
+  }
+}

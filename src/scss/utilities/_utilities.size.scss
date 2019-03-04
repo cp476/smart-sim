@@ -1,0 +1,20 @@
+$_sizes: 1 4 8 12 16 24 32 38 48 100 125 150 175 200;
+$units: (
+  vw: vw,
+  vh: vh,
+  px: px,
+  rem: rem,
+  percent: unquote('%')
+);
+
+@each $size in $_sizes {
+  @each $unit, $unit-var in $units {
+    @include utility(height-#{$size}#{$unit}) {
+      height: $size + $unit-var;
+    }
+
+    @include utility(width-#{$size}#{$unit}) {
+      width: $size + $unit-var;
+    }
+  }
+}

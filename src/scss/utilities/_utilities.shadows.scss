@@ -1,0 +1,13 @@
+$shadows: (
+  1: $elevation-1,
+  2: $elevation-2,
+  3: $elevation-3,
+  4: $elevation-4,
+  5: $elevation-5
+);
+
+@each $shadow, $shadow-var in $shadows {
+  @include utility(elevation-#{$shadow}) {
+    box-shadow: $shadow-var;
+  }
+}
