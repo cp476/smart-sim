@@ -5,10 +5,12 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "start": "node server.js",
     "lint": "vue-cli-service lint",
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
+    "express": "^4.16.4",
     "moment": "^2.22.2",
     "normalize-scss": "^7.0.1",
     "v-tooltip": "^2.0.0-rc.33",
