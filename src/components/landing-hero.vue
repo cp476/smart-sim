@@ -3,6 +3,8 @@
     <div class="container --medium">
       <h1 class="hero__lead +text-bold">Your Personal Sports Betting Simulator!</h1>
       <p class="hero__sub-lead +text-lg +text-grey-3 +text-regular">Practice sports betting with fake money</p>
+      <h2 class="hero__lead +text-bold"> You have: ${{update_bankroll}}</h2>
+
       <router-link class="hero__view-more +mg-t-xl +text-grey-1 +uppercase +text-bold +text-base +flex +align-items-center" :to="{ name: 'events' }">
         <span class="+mg-r-md">View all leagues</span>
         <i class="material-icons hero__arrow">
@@ -14,9 +16,52 @@
 </template>
 
 <script>
+import firebase from 'firebase';
+import { db } from '../main';
 
 export default {
+     data: () => ({
+        bankroll: null
+    }), 
+    mounted() {
+      const user = firebase.auth().currentUser
+      var self = this;
+      var docRef = db.collection("users").doc(user.uid);
+      var fireRoll =0;
+      docRef.get().then(function(doc) {
+        if (doc.exists) {
+            fireRoll = doc.data().bankroll;
+            self.bankroll = fireRoll;
+            console.log(  this.bankroll);
+        } else {
+            console.log("No such document!");
+        }
+          }).catch(function(error) {
+              console.log("Error getting document:", error);
+          });
+      return self.bankroll
+        },
 
+      computed: {
+         update_bankroll() {
+            const user = firebase.auth().currentUser
+            var self = this;
+            var docRef = db.collection("users").doc(user.uid);
+            var fireRoll =0;
+            docRef.get().then(function(doc) {
+                if (doc.exists) {
+                    fireRoll = doc.data().bankroll;
+                    self.bankroll = fireRoll;
+                    console.log(  this.bankroll);
+                } else {
+                    console.log("No such document!");
+                }
+                }).catch(function(error) {
+                    console.log("Error getting document:", error);
+                });
+            return self.bankroll
+        }
+      }
 };
 </script>
 

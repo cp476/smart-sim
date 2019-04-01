@@ -13,8 +13,8 @@
           <div class="grid events__category --no-gap">
             <div class="col-12">
               <div class="events__category-header">
-                <h2 @click="addData" class="+text-base +text-bold +uppercase +text-grey-6"> NBA League</h2>
-                <div class="events__count +mg-r-xs">4</div>
+                <h2  class="+text-base +text-bold +uppercase +text-grey-6"> NBA League</h2>
+                <div class="events__count +mg-r-xs">9</div>
               </div>
             </div>
 
@@ -46,23 +46,19 @@
                 </tr>
 
                 <template v-for="(event, index) in events" >
-                  <tr v-if="event.sport=='basketball'" class="events__table-row" :key="`top-row-${index}`" :class="{ '--smartline': event.is_preferred_event }">
+                  <tr v-if="event.sport=='basketball'" class="events__table-row" :key="`top-row-${index}`">
                     <td>
                       <span class="+block +text-base +mg-b-sm">{{ date(event.starting_time) }}</span>
-                      <span class="+block +text-grey-5 +text-sm">7:00pm ET</span>
+                      <span class="+block +text-grey-5 +text-sm"></span>
                     </td>
                     <td>
                       <div>
                         <div class="events__split-column">
-                          <!-- <img src="@/assets/nba-logos/atlanta-hawks.gif" class="events__logo +mg-r-xs" > -->
                           <team-badge class="events__logo +mg-r-xs" :team="event.team_name1" :sport="event.league" />
-
                           <span class="+block">{{ event.team_name1}}</span>
                         </div>
                         <div class="events__split-column">
-                          <!-- <img :src="event.team_2.logo" class="events__logo +mg-r-xs" :alt="event.team_2.full_name"> -->
                           <team-badge class="events__logo +mg-r-xs" :team="event.team_name2" :sport="event.league" />
-
                           <span class="+block">{{ event.team_name2 }}</span>
                         </div>
                       </div>
@@ -104,20 +100,6 @@
                   </tr>
                   <tr class="events__table-row-footer" :key="`bottom-row-${index}`">
                     <td colspan="6">
-
-                      <!-- <div class="+pd-sm +border-t-grey-1 +flex +justify-content-space-between +align-items-center">
-
-                        <div class="+flex +align-items-center">
-                          <span class="+block +mg-r-sm +uppercase +text-sm">Best odds on: </span>
-                          <img class="+height-16px" :src="`/book-logos/${bookLogo(event.odds[0].org)}.png`" :alt="event.odds[0].org">
-                        </div>
-
-                        <router-link class="events__view-books +uppercase text-link +flex +align-items-center" :to="{ name: 'event', params: { category: category.category, slug: event.slug } }">
-                          <span>View All Books</span>
-                          <i class="material-icons +mg-l-xs">arrow_forward</i>
-                        </router-link>
-                      </div> -->
-
                     </td>
                   </tr>
                 </template>
@@ -128,14 +110,71 @@
           <div class="+pd-md +border-t-grey-1 +flex +align-items-center">
 
             <div class="+flex +align-items-center +inline">
-              <span class="+in-line +mg-r-sm +uppercase +text-med">Balance: $100 </span>
+              <span class="+in-line +mg-r-sm +uppercase +text-med">Balance: ${{update_bankroll}} </span>
 
             </div>
+          </div>
+       
 
           </div>
+          <!-- this is where the next table should start -->
+        <div class="grid events__category --no-gap">
+
+          <div class="col-12">
+              <div class="events__category-header">
+                <h2 class="+text-base +text-bold +uppercase +text-grey-6"> Open NBA Bets</h2>
+                <div class="events__count +mg-r-xs">9</div>
+              </div>
+            </div>
+          <div class="col-12">
+            <table class="events__table">
+              <tr class="events__table-header">
+                  <th class="+uppercase +text-sm +text-grey-6">Type</th>
+                  <th class="+uppercase +text-sm +text-grey-6">Team Name</th>
+                  <th class="+uppercase +text-sm +text-grey-6">
+                      Odds
+                  </th>
+                  <th class="+uppercase +text-sm +text-grey-6">
+                      Risk
+                  </th>
+                  <th class="+uppercase +text-sm +text-grey-6">
+                      Confirm
+                  </th>
+                </tr>
+                <template v-for="(open, index) in open_events" >
+                  <tr class="events__table-row" :key="`top-row-${index}`">
+                    <td>
+                      <span class="+block +text-base +mg-b-sm"> {{open.type}}</span>
+                    </td>
+                    <td>
+                          <span class="+block">{{ open.teamName}}</span>
+                    </td>
+                    <td>
+                      <span class="+block +text-base +mg-b-sm"> {{open.val}}</span>
+                    </td>
+                    <td>
+                      <span class="+block +text-base +mg-b-sm"> {{open.risk}}</span>
+                    </td>
+                    <td>
+                    
+                    <button class="events__pill +mg-b-xs">  <span> <grade-badge :grade="'Y'" class="+mg-r-xs" /> </span>
+             </button>
+
+                        <button class="events__pill +mg-b-xs">  <span> <grade-badge :grade="'N'" class="+mg-r-xs" />  </span>
+             </button>
+
+                    </td>
+
+                  </tr>
+
+                </template>
 
 
-          </div>
+            </table>
+            </div>
+
+ 
+        </div>
         </div>
 
         <div class="col-3">
@@ -168,7 +207,8 @@ export default {
         errors: [],
         posts: [],
         events:[],
-
+        open_events:[],
+        bankroll:null,
         calcData: null
     }),
     created() {
@@ -180,6 +220,7 @@ export default {
     },
         mounted() {
           console.log(firebase.auth().currentUser);
+          var user = firebase.auth().currentUser;
           // console.log(db.collection('users'));
           console.log("legends");
           console.log(db.collection('users').orderBy('createdAt'));
@@ -191,17 +232,53 @@ export default {
             // JSON responses are automatically parsed.
             // this.posts = response.data
             this.events = response.data;
+            cosole.log("LOOL")
+            console.log(this.events);
 
           })
           .catch(e => {
-            console.log("HELLO3");
             this.errors.push(e)
             console.log(this.errors);
           })
         //  this.events = await events.data;
 
+        // var openBetsRef = db.collection("open");
+        // openBetsRef.get().then(function(doc) {
+        //    openBetsRef.docs.map(doc => doc.data());
+
+        // })
+
+         const markers = [];
+           db.collection("open").where("uid", "==", user.uid).get()
+            .then(querySnapshot => {
+              querySnapshot.docs.forEach(doc => {
+              this.open_events.push(doc.data());
+            });
+          });
+          console.log(markers);
+
         }
     ,
+    computed: {
+         update_bankroll() {
+            const user = firebase.auth().currentUser
+            var self = this;
+            var docRef = db.collection("users").doc(user.uid);
+            var fireRoll =0;
+            docRef.get().then(function(doc) {
+                if (doc.exists) {
+                    fireRoll = doc.data().bankroll;
+                    self.bankroll = fireRoll;
+                    console.log(  this.bankroll);
+                } else {
+                    console.log("No such document!");
+                }
+                }).catch(function(error) {
+                    console.log("Error getting document:", error);
+                });
+            return self.bankroll
+        }
+      },
     methods: {
         isActiveTab(event, type,team,name) {
           // console.log(team);
@@ -222,11 +299,9 @@ export default {
         date(date) {
             return moment(date).format('MMM Do, YY');
         },
-        addData: function () {
+
+        addBet: function (event) {
           console.log("LOOL")
-          // console.log(db.collection('users'));
-          // db.collection('users').add({"Moosa23":{"name":"moosa"}});
-          // console.log(db.collection('users').orderBy('createdAt'));
           var docRef = db.collection("users").doc("ci4qwT3schuGrpi34JLo");
 
           docRef.get().then(function(doc) {
@@ -242,6 +317,7 @@ export default {
 
 
     },
+    
         createChips(val) {
             this.chips = [];
             const values = val.filter(n => n);
@@ -356,9 +432,7 @@ export default {
     }
 
     @include part(table-row) {
-        @include option(smartline) {
-            box-shadow: 3px 0 0 $primary inset;
-        }
+       
     }
 
     @include part(table-row-footer) {

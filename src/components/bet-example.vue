@@ -28,9 +28,9 @@
         </div>
 
         <span class="+block +text-base +text-regular +text-grey-7 +mg-b-xxs">Suggested bet size: ${{ suggestedBetSize }}</span>
-        <span class="+block +text-base +text-regular +text-grey-7 +mg-b-lg">Remaining Bankroll: ${{ calculatedDailyBankroll }}</span>
+        <span class="+block +text-base +text-regular +text-grey-7 +mg-b-lg">Remaining Bankroll: ${{ update_bankroll }}</span>
 
-        <v-btn button-style="primary" :label="`Place Bet`"/>
+        <v-btn button-style="primary" :label="`Place Bet`" @click="addBet(bankroll,risk)"/>
         <v-btn
           label="Clear"
           class="+block +text-center +mg-t-sm +text-primary +uppercase"
@@ -42,6 +42,8 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import firebase from 'firebase';
+import { db } from '../main';
 import GradeBadge from '@/components/grade-badge';
 
 export default {
@@ -50,8 +52,27 @@ export default {
         payout: { type: Object, default: null }
     },
     data: () => ({
-        risk: null
+        risk: null,
+        bankroll: null
     }),
+    mounted() {
+      const user = firebase.auth().currentUser
+      var self = this;
+      var docRef = db.collection("users").doc(user.uid);
+      var fireRoll =0;
+      docRef.get().then(function(doc) {
+        if (doc.exists) {
+            fireRoll = doc.data().bankroll;
+            self.bankroll = fireRoll;
+            console.log(  this.bankroll);
+        } else {
+            console.log("No such document!");
+        }
+          }).catch(function(error) {
+              console.log("Error getting document:", error);
+          });
+      return self.bankroll
+        },
     computed: {
         ...mapGetters(['dailyBankroll']),
         suggestedBetSize() {
@@ -83,10 +104,65 @@ export default {
                 maximumFractionDigits: 2,
                 minimumFractionDigits: 2
             });
+        },
+        update_bankroll() {
+            const user = firebase.auth().currentUser
+            var self = this;
+            var docRef = db.collection("users").doc(user.uid);
+            var fireRoll =0;
+            docRef.get().then(function(doc) {
+                if (doc.exists) {
+                    fireRoll = doc.data().bankroll;
+                    self.bankroll = fireRoll;
+                    console.log(  this.bankroll);
+                } else {
+                    console.log("No such document!");
+                }
+                }).catch(function(error) {
+                    console.log("Error getting document:", error);
+                });
+            return self.bankroll
         }
+
     },
     methods: {
         cancelOrder() {
+            this.risk = null;
+            this.$emit('clear-payout');
+        },
+        addBet(firebankroll,risk) {
+            const user = firebase.auth().currentUser
+            var docRef2 = db.collection("open");
+            var self = this;
+
+            docRef2.add({
+                val: this.payout.val,
+                teamName: this.payout.team,
+                risk: this.risk,
+                type:this.payout.type,
+                uid:user.uid
+            })
+            .then(function(docRef) {
+                console.log("Document written with ID: ", docRef.id);
+                var new_bankroll = firebankroll - risk;
+                var user_ref = db.collection("users").doc(user.uid);
+                return user_ref.update({
+                    bankroll: new_bankroll
+                })
+                .then(function() {
+                    console.log("Document successfully updated!");
+                    update_bankroll();
+                    this.$emit('clear-payout');
+                })
+                .catch(function(error) {
+                    // The document probably doesn't exist.
+                    console.error("Error updating document: ", error);
+                });
+            })
+            .catch(function(error) {
+                console.error("Error adding document: ", error);
+            });
+
             this.risk = null;
             this.$emit('clear-payout');
         }

@@ -47,5 +47,12 @@ export default {
     @include option(d) {
         background: linear-gradient($red-4, lighten($red-6, 10%));
     }
+     @include option(y) {
+        background: linear-gradient($green-4, lighten($green-6, 10%));
+    }
+    @include option(n) {
+        background: linear-gradient($red-4, lighten($red-6, 10%));
+    }
+    
 }
 </style>

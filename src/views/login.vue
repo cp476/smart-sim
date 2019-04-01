@@ -79,6 +79,31 @@
           }).catch(function(error) {
               console.log("Error getting document:", error);
           });
+          var docRef2 = db.collection("open").doc(user.uid);
+           docRef2.get().then(function(doc) {
+              if (doc.exists) {
+                  console.log("Document data:", doc.data());
+              } else {
+                  // doc.data() will be undefined in this case
+                  console.log("No such document!");
+
+                 docRef2.set({
+                       
+                    })
+                    .then(function() {
+                        console.log("Document successfully written!");
+                    })
+                    .catch(function(error) {
+                        console.error("Error writing document: ", error);
+                    });
+
+              }
+          }).catch(function(error) {
+              console.log("Error getting document:", error);
+          });
+
+
+          
 
 
           this.$router.replace('events');

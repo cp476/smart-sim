@@ -3,7 +3,7 @@
     <div class="daily-bankroll" role="dialog">
       <div class="daily-bankroll__content +elevation-5 +radius-xxs +relative" role="dialog" v-on-clickaway="closeBankroll">
         <header class="+pd-lg +pd-t-xxl +pd-b-0 +text-center">
-          <h1 class="+text-lg +text-grey-7 +mg-b-md">What is your bankroll?</h1>
+          <h1 class="+text-lg +text-grey-7 +mg-b-md">Add Money to your bankroll</h1>
           <p class="+mg-0 +text-grey-5">Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus esse architecto provident quo, exercitationem pariatur magnam minus iusto culpa tempore?</p>
         </header>
 
@@ -15,7 +15,7 @@
             v-model="bankroll"
             :placeholder="`${bankroll}` || 'Enter your bankroll...'">
 
-          <v-btn button-style="primary" class="+text-base +width-100percent" label="Save Bankroll" @click="setDailyBankroll"/>
+          <v-btn button-style="primary" class="+text-base +width-100percent" label="Save Bankroll" @click="addBank(bankroll)"/>
           <v-btn label="I don't have one" class="+mg-t-md +uppercase +text-sm +text-grey-5" @click="closeBankroll"/>
           <v-btn @click="closeBankroll" class="+absolute +pin-right-sm +pin-top-sm">
             <i slot="icon" class="material-icons +text-lg +text-grey-5">close</i>
@@ -36,10 +36,11 @@ import { db } from '../main';
 export default {
     mixins: [clickaway],
     data: () => ({
-        bankroll: 0
+        bankroll: 0,
+        firebank:0,
     }),
     mounted() {
-       const user = firebase.auth().currentUser
+      const user = firebase.auth().currentUser
       var self = this;
       var docRef = db.collection("users").doc(user.uid);
       var fireRoll =0;
@@ -48,11 +49,8 @@ export default {
                   console.log("Document data:", doc.data().bankroll);
                   console.log("bankroll is: ")
                   fireRoll = doc.data().bankroll;
-                  self.bankroll = fireRoll;
+                  self.firebank = fireRoll;
                   console.log(  this.bankroll);
-
-                  // this.bankroll = doc.data().bankroll;
-                  // console.log(this.bankroll);
               } else {
                   // doc.data() will be undefined in this case
                   console.log("No such document!");
@@ -61,8 +59,7 @@ export default {
               console.log("Error getting document:", error);
           });
 
-      return self.bankroll
-
+      return self.firebank
         }
     ,
     computed: {
@@ -101,6 +98,53 @@ export default {
         setDailyBankroll() {
             this.updateDailyBankroll(this.bankroll || 0);
             this.closeBankroll();
+        },
+          addBank(bankroll) {
+            const user = firebase.auth().currentUser
+            var docRef2 = db.collection("open");
+            var self = this;
+
+            var new_bankroll = firebankroll - risk;
+                var user_ref = db.collection("users").doc(user.uid);
+                return user_ref.update({
+                    bankroll: new_bankroll
+                })
+                .then(function() {
+                    console.log("Document successfully updated!");
+                    update_bankroll();
+                    this.$emit('clear-payout');
+                })
+
+            docRef2.add({
+                val: this.payout.val,
+                teamName: this.payout.team,
+                risk: this.risk,
+                type:this.payout.type,
+                uid:user.uid
+            })
+            .then(function(docRef) {
+                console.log("Document written with ID: ", docRef.id);
+                var new_bankroll = firebankroll - risk;
+                var user_ref = db.collection("users").doc(user.uid);
+                return user_ref.update({
+                    bankroll: new_bankroll
+                })
+                .then(function() {
+                    console.log("Document successfully updated!");
+                    update_bankroll();
+                    this.$emit('clear-payout');
+                })
+                .catch(function(error) {
+                    // The document probably doesn't exist.
+                    console.error("Error updating document: ", error);
+                });
+            })
+            .catch(function(error) {
+                console.error("Error adding document: ", error);
+            });
+
+            this.risk = null;
+            this.$emit('clear-payout');
         }
     }
 };
