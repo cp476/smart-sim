@@ -9,7 +9,7 @@
       <div class="+flex +flex-direction-column" v-else>
         <div class="+flex +justify-content-space-between +text-regular +text-grey-6 +mg-b-xxs">
           <span>{{ payout.team }}</span>
-          <span class="+flex +align-items-center"><grade-badge :grade="payout.grade" class="+mg-r-xs" /> {{ payout.direction }}{{ payout.val }}</span>
+          <span class="+flex +align-items-center"><grade-badge :grade="payout.grade" class="+mg-r-xs" /> {{ payout.val }}</span>
         </div>
 
         <span class="+block +uppercase +text-sm +mg-b-sm +text-grey-5">{{ type }}</span>
@@ -75,11 +75,9 @@ export default {
                 return null;
             }
 
-            const value = parseInt(this.payout.val);
+            // const value = parseInt(this.payout.val);
 
-            const result = this.isFavored
-                ? Math.round(this.risk * (value / 100) * 100) / 100
-                : Math.round((this.risk / (value / 100)) * 100) / 100;
+            const result = this.risk  * this.payout.val;
             return result.toLocaleString('en-US', {
                 style: 'decimal',
                 maximumFractionDigits: 2,

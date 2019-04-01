@@ -1,49 +1,148 @@
 <template>
-    <div id="login">
-        <h1>Login</h1>
-        <input type="text" name="username" v-model="input.username" placeholder="Username" />
-        <input type="text" v-model="username" name="username" class="form-control" :class="{ 'is-invalid': submitted && !username }" />
 
-        <input type="password" name="password" v-model="input.password" placeholder="Password" />
-        <button type="button" v-on:click="login()">Login</button>
+<div class="grid" style="display:flex;justify-content: center;">
+  <div class="col-9 login">
+    <div class="inner-login ">
+        <h3>Sign In</h3>
+        <input style="width:100%" type="text" v-model="email" placeholder="Email"><br>
+        <input style="width:100%" type="password" v-model="password" placeholder="Password"><br>
+        <!-- <button >Connection</button> -->
+        <!-- <v-btn @click="socialLogin" button-style="facebook" :label="`Sign in with Facebook`"/> -->
+
+    <div style="padding-left:60px;">
+        <v-btn @click="login" button-style="primary" :label="`Login`"/> <br>
+
+        <p>
+      or Sign In with Google <br></p>
+      <div style="padding-left:30px;">
+      <button @click="socialLogin" class="social-button" >
+        <img alt="Google Logo" src="../assets/google-logo.png">
+      </button>
+      </div>
+    
     </div>
+        <p>You don't have an account ? You can <router-link to="/register">create one</router-link></p>
+    </div>
+    </div>
+  </div>
 </template>
 
 <script>
-    export default {
-        name: 'Login',
-        data() {
-            return {
-                input: {
-                    username: "",
-                    password: ""
-                }
-            }
-        },
-        methods: {
-            login() {
-                if(this.input.username != "" && this.input.password != "") {
-                    if(this.input.username == this.$parent.mockAccount.username && this.input.password == this.$parent.mockAccount.password) {
-                        this.$emit("authenticated", true);
-                        this.$router.replace({ name: "secure" });
-                    } else {
-                        console.log("The username and / or password is incorrect");
-                    }
-                } else {
-                    console.log("A username and password must be present");
-                }
-            }
-        }
+  import firebase from 'firebase';
+  import { db } from '../main'
+  export default {
+    name: 'login',
+    data() {
+      return {
+        email: '',
+        password: ''
+      }
+    },
+    methods: {
+      login: function() {
+        firebase.auth().signInWithEmailAndPassword(this.email, this.password).then(
+          (user) => {
+            this.$router.replace('events')
+          },
+          (err) => {
+            alert('Oops. ' + err.message)
+          }
+        );
+      },
+    socialLogin() {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        firebase.auth().signInWithPopup(provider).then((result) => {
+          console.log(db);
+          // var a ="moosa";
+          const user = firebase.auth().currentUser
+          var docRef = db.collection("users").doc(user.uid);
+          docRef.get().then(function(doc) {
+              if (doc.exists) {
+                  console.log("Document data:", doc.data());
+              } else {
+                  // doc.data() will be undefined in this case
+                  console.log("No such document!");
+
+                 docRef.set({
+                        name: user.displayName,
+                        email: user.email,
+                        bankroll: 0
+                    })
+                    .then(function() {
+                        console.log("Document successfully written!");
+                    })
+                    .catch(function(error) {
+                        console.error("Error writing document: ", error);
+                    });
+
+              }
+          }).catch(function(error) {
+              console.log("Error getting document:", error);
+          });
+
+
+          this.$router.replace('events');
+        }).catch((err) => {
+          alert('Oops. ' + err.message)
+        });
+      }
+
     }
+  }
 </script>
 
-<style scoped>
-    #login {
-        width: 500px;
-        border: 1px solid #CCCCCC;
-        background-color: #FFFFFF;
-        margin: auto;
-        margin-top: 200px;
-        padding: 20px;
-    }
+<style scoped>  /* "scoped" attribute limit the CSS to this component only */
+
+.inner-login{
+    background-color: white;
+    /* display: flex;
+    justify-content: center;
+    flex-direction: column; */
+
+}
+  .login {
+    padding-top:100px;
+    padding-bottom:150px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    background-color: white;
+
+    
+    
+  }
+  input {
+    margin: 10px 0;
+    width: 20%;
+    padding: 15px;
+  }
+  button {
+    margin-top: 20px;
+    width: 10%;
+    cursor: pointer;
+  }
+  p {
+    margin-top: 40px;
+    font-size: 13px;
+  }
+  p a {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+    .social-button {
+    width: 75px;
+    background: white;
+    padding: 10px;
+    border-radius: 100%;
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
+    outline: 0;
+    border: 0;
+  }
+  .social-button:active {
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.1);
+  }
+  .social-button img {
+    width: 100%;
+  }
 </style>

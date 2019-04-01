@@ -10,13 +10,18 @@
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
+    "bootstrap": "^4.3.1",
+    "bootstrap-vue": "^2.0.0-rc.15",
     "express": "^4.16.4",
+    "firebase": "^5.9.1",
     "moment": "^2.22.2",
     "normalize-scss": "^7.0.1",
     "v-tooltip": "^2.0.0-rc.33",
-    "vue": "^2.5.17",
+    "vue": "^2.6.10",
+    "vue-axios": "^2.1.4",
     "vue-instantsearch": "^1.7.0",
     "vue-router": "^3.0.1",
+    "vuefire": "^1.4.5",
     "vuejs-datepicker": "^1.5.3",
     "vuex": "^3.0.1"
   },
@@ -41,6 +46,6 @@
     "stylelint-scss": "^3.3.0",
     "vue-clickaway": "^2.2.2",
     "vue-multiselect": "^2.1.0",
-    "vue-template-compiler": "^2.5.17"
+    "vue-template-compiler": "^2.6.10"
   }
 }

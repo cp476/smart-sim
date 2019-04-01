@@ -13,7 +13,7 @@
             class="daily-bankroll__input +inline-block +mg-t-lg +mg-b-xl"
             @keyup.enter="setDailyBankroll"
             v-model="bankroll"
-            :placeholder="`$${dailyBankroll}` || 'Enter your bankroll...'">
+            :placeholder="`${bankroll}` || 'Enter your bankroll...'">
 
           <v-btn button-style="primary" class="+text-base +width-100percent" label="Save Bankroll" @click="setDailyBankroll"/>
           <v-btn label="I don't have one" class="+mg-t-md +uppercase +text-sm +text-grey-5" @click="closeBankroll"/>
@@ -29,14 +29,69 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import { mixin as clickaway } from 'vue-clickaway';
+import firebase from 'firebase';
+import { db } from '../main';
+
 
 export default {
     mixins: [clickaway],
     data: () => ({
-        bankroll: null
+        bankroll: 0
     }),
+    mounted() {
+       const user = firebase.auth().currentUser
+      var self = this;
+      var docRef = db.collection("users").doc(user.uid);
+      var fireRoll =0;
+      docRef.get().then(function(doc) {
+              if (doc.exists) {
+                  console.log("Document data:", doc.data().bankroll);
+                  console.log("bankroll is: ")
+                  fireRoll = doc.data().bankroll;
+                  self.bankroll = fireRoll;
+                  console.log(  this.bankroll);
+
+                  // this.bankroll = doc.data().bankroll;
+                  // console.log(this.bankroll);
+              } else {
+                  // doc.data() will be undefined in this case
+                  console.log("No such document!");
+              }
+          }).catch(function(error) {
+              console.log("Error getting document:", error);
+          });
+
+      return self.bankroll
+
+        }
+    ,
     computed: {
-        ...mapGetters(['dailyBankroll'])
+        // ...mapGetters(['dailyBankroll']),
+        // a computed getter
+    firebaseBankroll: function () {
+      // `this` points to the vm instance
+      // const user = firebase.auth().currentUser
+
+      // var docRef = db.collection("users").doc(user.uid);
+      // var fireRoll =0;
+      // docRef.get().then(function(doc) {
+      //         if (doc.exists) {
+      //             console.log("Document data:", doc.data().bankroll);
+      //             console.log("bankroll is: ")
+      //             var fireRoll = doc.data().bankroll;
+
+      //           console.log("niggers");
+      //           console.log(fireRoll);
+      //         return fireRoll ;
+      //         } else {
+      //             // doc.data() will be undefined in this case
+      //             console.log("No such document!");
+      //         }
+      //     }).catch(function(error) {
+      //         console.log("Error getting document:", error);
+      //     });
+
+    }
     },
     methods: {
         ...mapActions(['updateDailyBankroll']),

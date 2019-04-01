@@ -1,7 +1,5 @@
 <template>
   <div class="events">
-
-
     <div class="container +mg-t-lg +mg-b-xxl">
       <div class="grid" v-if="!events">
         <div class="col-12 +text-center">
@@ -12,11 +10,11 @@
 
       <div class="grid">
         <div class="col-9">
-          <div class="grid events__category --no-gap" v-for="(category, index) in events" :key="index">
+          <div class="grid events__category --no-gap">
             <div class="col-12">
               <div class="events__category-header">
-                <h2 class="+text-base +text-bold +uppercase +text-grey-6"> {{ category.category }} League</h2>
-                <div class="events__count +mg-r-xs">{{ category.events.length }}</div>
+                <h2 @click="addData" class="+text-base +text-bold +uppercase +text-grey-6"> NBA League</h2>
+                <div class="events__count +mg-r-xs">4</div>
               </div>
             </div>
 
@@ -25,13 +23,7 @@
                 <tr class="events__table-header">
                   <th class="+uppercase +text-sm +text-grey-6">Date</th>
                   <th class="+uppercase +text-sm +text-grey-6">Teams</th>
-
-                  <!-- <th class="+uppercase +text-sm +text-grey-6">
-                    <div class="+flex +align-items-center">
-                      Win %
-                      <info-badge class="+mg-l-sm" content="Lorem ipsum dolor sit amet consectetur, adipisicing elit. Vero, asperiores."/>
-                    </div>
-                  </th> -->
+                  
 
                   <th class="+uppercase +text-sm +text-grey-6">
                     <div class="+flex +align-items-center">
@@ -52,78 +44,67 @@
                     </div>
                   </th>
                 </tr>
-                <template v-for="(event, index) in category.events">
-                  <tr class="events__table-row" :key="`top-row-${index}`" :class="{ '--smartline': event.is_preferred_event }">
+
+                <template v-for="(event, index) in events" >
+                  <tr v-if="event.sport=='basketball'" class="events__table-row" :key="`top-row-${index}`" :class="{ '--smartline': event.is_preferred_event }">
                     <td>
-                      <span class="+block +text-base +mg-b-sm">{{ date(event.date) }}</span>
-                      <span class="+block +text-grey-5 +text-sm">{{ event.starting_time }}</span>
+                      <span class="+block +text-base +mg-b-sm">{{ date(event.starting_time) }}</span>
+                      <span class="+block +text-grey-5 +text-sm">7:00pm ET</span>
                     </td>
                     <td>
                       <div>
                         <div class="events__split-column">
-                          <img :src="event.team_1.logo" class="events__logo +mg-r-xs" :alt="event.team_1.full_name">
-                          <span class="+block">{{ event.team_1.team_name }}</span>
+                          <!-- <img src="@/assets/nba-logos/atlanta-hawks.gif" class="events__logo +mg-r-xs" > -->
+                          <team-badge class="events__logo +mg-r-xs" :team="event.team_name1" :sport="event.league" />
+
+                          <span class="+block">{{ event.team_name1}}</span>
                         </div>
                         <div class="events__split-column">
-                          <img :src="event.team_2.logo" class="events__logo +mg-r-xs" :alt="event.team_2.full_name">
-                          <span class="+block">{{ event.team_2.team_name }}</span>
+                          <!-- <img :src="event.team_2.logo" class="events__logo +mg-r-xs" :alt="event.team_2.full_name"> -->
+                          <team-badge class="events__logo +mg-r-xs" :team="event.team_name2" :sport="event.league" />
+
+                          <span class="+block">{{ event.team_name2 }}</span>
                         </div>
                       </div>
                     </td>
 
-                    <!-- <td>
-                      <div class="events__split-column +flex">
-                        <svg width="24" height="24" class="events__smartline-icon +mg-r-xs" v-tooltip="{ content: 'Smart sports sim Daily Pick' }">
-                          <g fill="#0094D2" fill-rule="evenodd">
-                            <path fill-rule="nonzero" d="M12 23c6.075 0 11-4.925 11-11S18.075 1 12 1 1 5.925 1 12s4.925 11 11 11zm0 1C5.373 24 0 18.627 0 12S5.373 0 12 0s12 5.373 12 12-5.373 12-12 12z"/>
-                            <path d="M8.409 17.168c-1.722 0-2.968-.602-3.794-1.484l.91-1.26a4.028 4.028 0 0 0 2.954 1.288c1.344 0 1.876-.658 1.876-1.274 0-1.96-5.446-.742-5.446-4.186 0-1.54 1.358-2.73 3.402-2.73 1.456 0 2.632.462 3.5 1.302l-.938 1.218c-.728-.728-1.722-1.064-2.702-1.064-.966 0-1.582.462-1.582 1.162 0 1.736 5.432.658 5.432 4.144 0 1.554-1.092 2.884-3.612 2.884zM19.287 17h-5.754V7.662h1.638v7.896h4.116V17z"/>
-                          </g>
-                        </svg>
-                        <span>{{ event.odds[0].team_1.true_odds.value }}%</span>
-                      </div>
-                      <div class="events__split-column +flex">
-                        <i class="material-icons +text-lg +mg-r-xs +text-red-4" v-tooltip="{ content: 'Careful with this bet' }">thumb_down</i>
-                        <span>{{ event.odds[0].team_2.true_odds.value }}%</span>
-                      </div>
-                    </td> -->
-
-
                     <td>
-                      <button :class="{ '--active': isActiveTab(event, 'moneyline', 'team_1') }" class="events__pill +mg-b-xs" @click="checkPayout(event, 'moneyline', 'team_1')">
+                      <button :class="{ '--active': isActiveTab(event, 'moneyline', 'team_1','team_name1') }" class="events__pill +mg-b-xs" @click="checkPayout(event, 'moneyline','team_1' ,'team_name1')">
                         <grade-badge :grade="event.odds[0].team_1.moneyline.grade" class="+mg-r-xs" />
-                        <span class="+text-primary +text-sm +text-bold">{{ event.odds[0].team_1.moneyline.direction }}{{ event.odds[0].team_1.moneyline.value }}</span>
+                        <span class="+text-primary +text-sm +text-bold">{{ event.odds[0].team_1.moneyline.value }}</span>
                       </button>
 
-                      <button :class="{ '--active': isActiveTab(event, 'moneyline', 'team_2') }" class="events__pill" @click="checkPayout(event, 'moneyline', 'team_2')">
+                      <button :class="{ '--active': isActiveTab(event, 'moneyline', 'team_2','team_name2')  }" class="events__pill" @click="checkPayout(event, 'moneyline', 'team_2','team_name2')">
                         <grade-badge :grade="event.odds[0].team_2.moneyline.grade" class="+mg-r-xs" />
-                        <span class="+text-primary +text-sm +text-bold">{{ event.odds[0].team_2.moneyline.direction }}{{ event.odds[0].team_2.moneyline.value }}</span>
+                        <span class="+text-primary +text-sm +text-bold">{{ event.odds[0].team_2.moneyline.value }}</span>
                       </button>
                     </td>
                     <td>
-                      <button :class="{ '--active': isActiveTab(event, 'true_odds', 'team_1') }" class="events__pill +mg-b-xs" @click="checkPayout(event, 'true_odds', 'team_1')">
-                        <grade-badge :grade="event.odds[0].team_1.true_odds.grade" class="+mg-r-xs" />
-                        <span class="+text-primary +text-sm +text-bold">{{ event.odds[0].team_1.true_odds.direction }}{{ event.odds[0].team_1.true_odds.value }}</span>
+                      <button :class="{ '--active': isActiveTab(event, 'spread', 'team_1','team_name1') }" class="events__pill +mg-b-xs" @click="checkPayout(event, 'spread', 'team_1','team_name1')">
+                        <grade-badge :grade="event.odds[0].team_1.spread.grade" class="+mg-r-xs" />
+                        <span class="+text-primary +text-sm +text-bold"> {{ event.odds[0].team_1.spread.handicap }}| {{ event.odds[0].team_1.spread.value }}</span>
                       </button>
 
-                      <button :class="{ '--active': isActiveTab(event, 'true_odds', 'team_2') }" class="events__pill" @click="checkPayout(event, 'true_odds', 'team_2')">
-                        <grade-badge :grade="event.odds[0].team_2.true_odds.grade" class="+mg-r-xs" />
-                        <span class="+text-primary +text-sm +text-bold">{{ event.odds[0].team_2.true_odds.direction }}{{ event.odds[0].team_2.true_odds.value }}</span>
+                      <button :class="{ '--active': isActiveTab(event, 'spread', 'team_2','team_name2') }" class="events__pill" @click="checkPayout(event, 'spread', 'team_2','team_name2')">
+                        <grade-badge :grade="event.odds[0].team_2.spread.grade" class="+mg-r-xs" />
+                        <span class="+text-primary +text-sm +text-bold">{{ event.odds[0].team_2.spread.handicap }}| {{ event.odds[0].team_2.spread.value  }}</span>
                       </button>
                     </td>
                     <td>
-                      <button :class="{ '--active': isActiveTab(event, 'spread', 'team_1') }" class="events__pill +mg-b-xs" @click="checkPayout(event, 'spread', 'team_1')">
-                        <grade-badge :grade="event.odds[0].team_1.spread.grade" class="+mg-r-xs" />
-                        <span class="+text-primary +text-sm +text-bold">{{ event.odds[0].team_1.spread.direction }}{{ event.odds[0].team_1.spread.value }}</span>
+                      <button :class="{ '--active': isActiveTab(event, 'total', 'team_2','team_name2') }" class="events__pill +mg-b-xs" @click="checkPayout(event, 'spread', 'team_1','team_name1')">
+                        <grade-badge :grade="event.odds[0].total.under_pref.grade" class="+mg-r-xs" />
+                        <span class="+text-primary +text-sm +text-bold">{{ event.odds[0].total.value}}|{{ event.odds[0].total.under_pref.value }}</span>
                       </button>
 
                       <button :class="{ '--active': isActiveTab(event, 'spread', 'team_1') }" class="events__pill" @click="checkPayout(event, 'spread', 'team_2')">
-                        <grade-badge :grade="event.odds[0].team_2.spread.grade" class="+mg-r-xs" />
-                        <span class="+text-primary +text-sm +text-bold">{{ event.odds[0].team_2.spread.direction }}{{ event.odds[0].team_2.spread.value }}</span>
+                        <grade-badge :grade="event.odds[0].total.under_pref.grade" class="+mg-r-xs" />
+                        <span class="+text-primary +text-sm +text-bold">{{ event.odds[0].total.value }}|{{ event.odds[0].total.under_pref.value }}</span>
                       </button>
                     </td>
                   </tr>
                   <tr class="events__table-row-footer" :key="`bottom-row-${index}`">
                     <td colspan="6">
+
                       <!-- <div class="+pd-sm +border-t-grey-1 +flex +justify-content-space-between +align-items-center">
 
                         <div class="+flex +align-items-center">
@@ -135,8 +116,8 @@
                           <span>View All Books</span>
                           <i class="material-icons +mg-l-xs">arrow_forward</i>
                         </router-link>
-
                       </div> -->
+
                     </td>
                   </tr>
                 </template>
@@ -168,36 +149,99 @@
 <script>
 import axios from 'axios';
 import moment from 'moment';
+import firebase from 'firebase';
+import TeamBadge from '@/components/team-badge';
 import BetExample from '@/components/bet-example';
 import Loader from '@/components/loader';
 import InfoBadge from '@/components/info-badge';
 import GradeBadge from '@/components/grade-badge';
+import { db } from '../main';
 
 export default {
-    components: {  Loader, BetExample, InfoBadge, GradeBadge },
+    // devtools = true,
+    // debug = true,
+    components: { TeamBadge, Loader, BetExample, InfoBadge, GradeBadge },
     data: () => ({
         events: null,
         search: null,
         chips: [],
+        errors: [],
+        posts: [],
+        events:[],
+
         calcData: null
     }),
-    async created() {
-        const events = await axios.get('/events');
-        this.events = await events.data;
+    created() {
+        // const events = await axios.get('/events');
+        // const events={};
+        // console.log("HELLO");
+        
+
     },
+        mounted() {
+          console.log(firebase.auth().currentUser);
+          // console.log(db.collection('users'));
+          console.log("legends");
+          console.log(db.collection('users').orderBy('createdAt'));
+          // db.collection('users').add({"Moosa":{"name":"moosa"}});
+
+          axios.get(`https://droplet.smartlines.ca/apiv2/events/`)
+          .then(response => {
+
+            // JSON responses are automatically parsed.
+            // this.posts = response.data
+            this.events = response.data;
+
+          })
+          .catch(e => {
+            console.log("HELLO3");
+            this.errors.push(e)
+            console.log(this.errors);
+          })
+        //  this.events = await events.data;
+
+        }
+    ,
     methods: {
-        isActiveTab(event, type, team) {
+        isActiveTab(event, type,team,name) {
+          // console.log(team);
+            // console.log(event.odds[0].team_1.moneyline.value);
+            var team1 = '';
+            if(team == 'team_1'){
+              team1= "team_1";
+            }
+            // console.log(team1);
             if (!this.calcData) return;
             return (
-                event.odds[0][team][type].value === this.calcData.val &&
+                event.odds[0].team_1.moneyline.value === this.calcData.val &&
                 type === this.calcData.type &&
-                event[team].full_name == this.calcData.team
+                event.name== this.calcData.team
             );
         },
         
         date(date) {
             return moment(date).format('MMM Do, YY');
         },
+        addData: function () {
+          console.log("LOOL")
+          // console.log(db.collection('users'));
+          // db.collection('users').add({"Moosa23":{"name":"moosa"}});
+          // console.log(db.collection('users').orderBy('createdAt'));
+          var docRef = db.collection("users").doc("ci4qwT3schuGrpi34JLo");
+
+          docRef.get().then(function(doc) {
+              if (doc.exists) {
+                  console.log("Document data:", doc.data());
+              } else {
+                  // doc.data() will be undefined in this case
+                  console.log("No such document!");
+              }
+          }).catch(function(error) {
+              console.log("Error getting document:", error);
+          });
+
+
+    },
         createChips(val) {
             this.chips = [];
             const values = val.filter(n => n);
@@ -211,16 +255,16 @@ export default {
             const sport = val.sport.value === 'All Sports' ? '' : val.sport.value;
             const event = val.event.value === null ? '' : val.event.value;
 
-            this.search = `${sport} ${event}`;
+            this.search = `${sport} ${event}`; 
             this.createChips([sport, event]);
         },
-        checkPayout(event, type, team) {
+        checkPayout(event, type, team,name) {
             this.calcData = {
-                team: event[team].full_name,
+                team: event.team_name1,
                 type,
                 grade: event.odds[0][team][type].grade,
-                direction: event.odds[0][team][type].direction,
-                org: event.odds[0].org,
+                // direction: event.odds[0][team][type].direction,
+                // org: event.odds[0].org,
                 val: event.odds[0][team][type].value
             };
         }
@@ -238,10 +282,6 @@ export default {
         justify-content: space-between;
         min-height: 57px;
         padding: $md-unit;
-    }
-
-    @include part(smartline-icon) {
-        animation: icon 1000ms ease 1000ms infinite;
     }
 
     @include part(split-column) {

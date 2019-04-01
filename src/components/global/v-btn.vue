@@ -62,6 +62,18 @@ export default {
             color: $grey-1;
         }
     }
+    @include option(facebook) {
+            background-color: $facebook;
+            color: $white;
+            min-width: 250px;
+
+
+            &:hover {
+                background: $facebook;
+                color: $white;
+            }
+        }
+    
 
     @include option(primary) {
         background-color: $primary;
