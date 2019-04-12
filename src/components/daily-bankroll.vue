@@ -16,7 +16,7 @@
             :placeholder="`${bankroll}` || 'Enter your bankroll...'">
 
           <v-btn button-style="primary" class="+text-base +width-100percent" label="Save Bankroll" @click="addBank(firebank,bankroll),closeBankroll"/>
-          <v-btn label="I don't have one" class="+mg-t-md +uppercase +text-sm +text-grey-5" @click="closeBankroll"/>
+          <v-btn label="Close" class="+mg-t-md +uppercase +text-sm +text-grey-5" @click="closeBankroll"/>
           <v-btn @click="closeBankroll" class="+absolute +pin-right-sm +pin-top-sm">
             <i slot="icon" class="material-icons +text-lg +text-grey-5">close</i>
           </v-btn>
@@ -46,13 +46,10 @@ export default {
       var fireRoll =0;
       docRef.get().then(function(doc) {
               if (doc.exists) {
-                  console.log("Document data:", doc.data().bankroll);
-                  console.log("bankroll is: ")
+  
                   fireRoll = doc.data().bankroll;
                   self.firebank = fireRoll;
-                  console.log(  this.bankroll);
               } else {
-                  // doc.data() will be undefined in this case
                   console.log("No such document!");
               }
           }).catch(function(error) {
@@ -62,43 +59,11 @@ export default {
       return self.firebank
         }
     ,
-    computed: {
-        // ...mapGetters(['dailyBankroll']),
-        // a computed getter
-    firebaseBankroll: function () {
-      // `this` points to the vm instance
-      // const user = firebase.auth().currentUser
-
-      // var docRef = db.collection("users").doc(user.uid);
-      // var fireRoll =0;
-      // docRef.get().then(function(doc) {
-      //         if (doc.exists) {
-      //             console.log("Document data:", doc.data().bankroll);
-      //             console.log("bankroll is: ")
-      //             var fireRoll = doc.data().bankroll;
-
-      //           console.log("niggers");
-      //           console.log(fireRoll);
-      //         return fireRoll ;
-      //         } else {
-      //             // doc.data() will be undefined in this case
-      //             console.log("No such document!");
-      //         }
-      //     }).catch(function(error) {
-      //         console.log("Error getting document:", error);
-      //     });
-
-    }
-    },
     methods: {
-        ...mapActions(['updateDailyBankroll']),
         closeBankroll() {
             this.$emit('close-bankroll');
         },
-        setDailyBankroll() {
-            this.updateDailyBankroll(this.bankroll || 0);
-            this.closeBankroll();
-        },
+        
           addBank(firebank,bankroll) {
             const user = firebase.auth().currentUser
                 var user_ref = db.collection("users").doc(user.uid);
@@ -107,7 +72,6 @@ export default {
                     bankroll: new_bank
                 })
                 .then(function() {
-                    console.log("Document successfully updated!");
                     // this.$emit('clear-payout');
                      this.$emit('close-bankroll');
                 })

@@ -21,16 +21,12 @@ export default {
       var fireRoll =0;
       docRef.get().then(function(doc) {
               if (doc.exists) {
-                  console.log("Document data:", doc.data().bankroll);
-                  console.log("bankroll is: ")
+
                   fireRoll = doc.data().bankroll;
                   self.bankroll = fireRoll;
-                  console.log(  this.bankroll);
 
-                  // this.bankroll = doc.data().bankroll;
-                  // console.log(this.bankroll);
+        
               } else {
-                  // doc.data() will be undefined in this case
                   console.log("No such document!");
               }
           }).catch(function(error) {
@@ -38,6 +34,7 @@ export default {
           });
 
       return self.bankroll
+
 
         }
 };

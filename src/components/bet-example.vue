@@ -27,7 +27,6 @@
             label="To Win"/>
         </div>
 
-        <span class="+block +text-base +text-regular +text-grey-7 +mg-b-xxs">Suggested bet size: ${{ suggestedBetSize }}</span>
         <span class="+block +text-base +text-regular +text-grey-7 +mg-b-lg">Remaining Bankroll: ${{ update_bankroll }}</span>
 
         <v-btn button-style="primary" :label="`Place Bet`" @click="addBet(bankroll,risk)"/>
@@ -41,7 +40,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
 import firebase from 'firebase';
 import { db } from '../main';
 import GradeBadge from '@/components/grade-badge';
@@ -74,17 +72,8 @@ export default {
       return self.bankroll
         },
     computed: {
-        ...mapGetters(['dailyBankroll']),
-        suggestedBetSize() {
-            return Math.floor(this.dailyBankroll / 15);
-        },
-        calculatedDailyBankroll() {
-            if (this.risk > this.dailyBankroll) {
-                return 0;
-            }
-
-            return this.dailyBankroll - this.risk;
-        },
+        
+        
         isFavored() {
             return this.payout.direction === '+';
         },

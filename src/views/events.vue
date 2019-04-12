@@ -14,7 +14,7 @@
             <div class="col-12">
               <div class="events__category-header">
                 <h2  class="+text-base +text-bold +uppercase +text-grey-6"> NBA League</h2>
-                <div class="events__count +mg-r-xs">9</div>
+                <div class="events__count +mg-r-xs">6</div>
               </div>
             </div>
 
@@ -261,13 +261,7 @@ export default {
         end_user:null,
         history:null,
     }),
-    created() {
-        // const events = await axios.get('/events');
-        // const events={};
-        // console.log("HELLO");
-        
-
-    },firestore() {
+firestore() {
       var user = firebase.auth().currentUser;
       return {
         open_events: firestore2.collection('open').where("uid", "==", user.uid),
@@ -278,22 +272,11 @@ export default {
 
     },
         mounted() {
-          console.log(firebase.auth().currentUser);
           var user = firebase.auth().currentUser;
-          // console.log(db.collection('users'));
-          console.log("legends");
 
-          console.log("LETS GO ON A STRIKE!");
-          console.log(this.open_events);
-          // console.log(db.collection('users').orderBy('createdAt'));
-          // db.collection('users').add({"Moosa":{"name":"moosa"}});
-          console.log(this.open_events);
 
           axios.get(`https://droplet.smartlines.ca/apiv2/events/`)
           .then(response => {
-
-            // JSON responses are automatically parsed.
-            // this.posts = response.data
             this.events = response.data;
             cosole.log("LOOL")
             console.log(this.events);
@@ -307,54 +290,13 @@ export default {
 
         }
     ,
-    computed: {
-        //  update_bankroll() {
-        //     const user = firebase.auth().currentUser
-        //     var self = this;
-        //     var fireRoll = 0;
-        //     var docRef = db.collection("users").doc(user.uid);
-        //     docRef.get().then(function(doc) {
-        //         if (doc.exists) {
-        //             fireRoll = doc.data().bankroll;
-        //             self.bankroll = fireRoll;
-        //             console.log( this.bankroll);
-        //         } else {
-        //             console.log("No such document!");
-        //         }
-        //         }).catch(function(error) {
-        //             console.log("Error getting document:", error);
-        //         });
-        //     return self.bankroll
-        // }
-      },
-      // update_bankroll() {
-      //       const user = firebase.auth().currentUser
-      //       var self = this;
-      //       var docRef = db.collection("users").doc(user.uid);
-      //       var fireRoll = 0;
-      //       docRef.onSnapshot().then(function(doc) {
-      //           if (doc.exists) {
-      //               fireRoll = doc.data().bankroll;
-      //               self.bankroll = fireRoll;
-      //               console.log( this.bankroll);
-      //           } else {
-      //               console.log("No such document!");
-      //           }
-      //           }).catch(function(error) {
-      //               console.log("Error getting document:", error);
-      //           });
-      //       return self.bankroll
-      //   }
-      // }
     methods: {
         isActiveTab(event, type,team,name) {
-          // console.log(team);
-            // console.log(event.odds[0].team_1.moneyline.value);
+
             var team1 = '';
             if(team == 'team_1'){
               team1= "team_1";
             }
-            // console.log(team1);
             if (!this.calcData) return;
             return (
                 event.odds[0].team_1.moneyline.value === this.calcData.val &&
@@ -390,6 +332,8 @@ export default {
                 type:event.type,
                 uid:event.uid,
                 val:event.val,
+                created:event.created,
+                date:Date.now(),
                 result:1,
             })
             .then(function(docRef) {
