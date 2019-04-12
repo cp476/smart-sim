@@ -39,6 +39,5 @@ export const firestore2 = firebaseapp.firestore();
 
 new Vue({
     router,
-    store,
     render: h => h(App)
 }).$mount('#app');

@@ -3,25 +3,21 @@
 <div class="grid" style="display:flex;justify-content: center;">
   <div class="col-9 login">
     <div class="inner-login ">
-        <h3>Sign In</h3>
-        <input style="width:100%" type="text" v-model="email" placeholder="Email"><br>
-        <input style="width:100%" type="password" v-model="password" placeholder="Password"><br>
-        <!-- <button >Connection</button> -->
-        <!-- <v-btn @click="socialLogin" button-style="facebook" :label="`Sign in with Facebook`"/> -->
+ <div style="padding-left:60px;">
+        <h2>
+      Sign In with Google to acces the Smart Sports Simulator <br></h2>
+      
+      <p style="padding-left:290px"> Click the icon below to sign in! <br></p>
 
-    <div style="padding-left:60px;">
-        <v-btn @click="login" button-style="primary" :label="`Login`"/> <br>
+      <div style="padding-left:330px;">
 
-        <p>
-      or Sign In with Google <br></p>
-      <div style="padding-left:30px;">
       <button @click="socialLogin" class="social-button" >
         <img alt="Google Logo" src="../assets/google-logo.png">
       </button>
       </div>
     
     </div>
-        <p>You don't have an account ? You can <router-link to="/register">create one</router-link></p>
+       
     </div>
     </div>
   </div>
