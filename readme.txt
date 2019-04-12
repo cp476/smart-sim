@@ -1,7 +1,6 @@
-Name: Mohd Baquie
-ID: 140446350
+Name of Project: Smart Sports Simulator
+Member 1 : Mohd Baquie - 140446350
+Member 2: Evgeny Zhereshchin - 081840340
 Email: baqu6350@mylaurier.ca
-Assignment_ID: CP476A4
-Homework statement: I claim that the enclosed submission is my
-individual work.
-URL: https://hopper.wlu.ca/~baqu6350/A4/browse-paintings.php
+Homework statement: I claim that the enclosed submission is our group work.
+URL: https://smart-sim.herokuapp.com/
