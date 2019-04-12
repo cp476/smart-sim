@@ -1,7 +1,7 @@
 <template>
   <div class="bankroll +elevation-4 +border-grey-3 +cursor-pointer" @click="$emit('show-bankroll')">
-    <span class="+text-sm +text-grey-5 +uppercase">Bankroll</span>
-    <v-btn @click="$emit('show-bankroll')" :label="`$${bankroll}`"/>
+    <span class="+text-sm +text-grey-5 +uppercase">Deposit to Bankroll</span>
+    <v-btn @click="$emit('show-bankroll')" />
   </div>
 </template>
 

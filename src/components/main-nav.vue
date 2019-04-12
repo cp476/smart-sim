@@ -4,14 +4,12 @@
       <nav class="main-nav__links-container">
         <div class="main-nav__links">
           
-          <router-link exact-active-class="--active" to="/" class="main-nav__link">Home</router-link>
-          <router-link exact-active-class="--active" :to="{ name: 'about' }" class="main-nav__link">About</router-link>
+          <router-link exact-active-class="--active" to="/landing" class="main-nav__link">Home</router-link>
           <router-link exact-active-class="--active" :to="{ name: 'events' }" class="main-nav__link">Leagues</router-link>
         </div>
 
         <div class="main-nav__links">
-          <router-link exact-active-class="--active" :to="{ name: 'login' }" class="main-nav__link">Login</router-link>
-          <router-link exact-active-class="--active" :to="{ name: 'register' }" class="main-nav__link --sign-up">Sign Up</router-link>
+          <router-link exact-active-class="--active" :to="{ name: 'login' }" class="main-nav__link --sign-up">Login</router-link>
         </div>
       </nav>
     </div>
@@ -20,11 +18,9 @@
 </template>
 
 <script>
-import BreadCrumbs from '@/components/breadcrumbs';
 import { mixin as clickaway } from 'vue-clickaway';
 
 export default {
-    components: { BreadCrumbs },
     mixins: [clickaway],
     data: () => ({
         dropdown: {
@@ -64,52 +60,6 @@ $logo-width: $xl-unit * 3;
     @include part(links-container) {
         display: flex;
         justify-content: space-between;
-    }
-
-    @include part(logo) {
-        flex: 0 0 $logo-width;
-        margin-right: $lg-unit;
-        max-width: $logo-width;
-    }
-
-    @include part(dropdown) {
-        z-index: $z-three;
-    }
-
-    @include part(dropdown-container) {
-        background: $white;
-        border-radius: $xxs-unit;
-        box-shadow: $elevation-4;
-        display: flex;
-        flex-direction: column;
-        padding: $sm-unit 0;
-        position: absolute;
-        top: 100%;
-
-        &::before {
-            background: $white;
-            border-radius: 1px;
-            content: '';
-            height: 15px;
-            left: 15px;
-            position: absolute;
-            top: -7px;
-            transform: rotate(45deg);
-            width: 15px;
-            z-index: -1;
-        }
-
-        > .main-nav__link {
-            min-height: unset;
-
-            &:after {
-                display: none;
-            }
-
-            &:hover {
-                background: $grey-2;
-            }
-        }
     }
 
     @include part(link) {

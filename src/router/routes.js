@@ -1,13 +1,11 @@
 import Landing from '@/views/landing';
 import Events from '@/views/events';
-import About from '@/views/about';
 import Login from '@/views/login';
-import Register from '@/views/register';
 
 export default [
    
     {
-        path: '/',
+        path: '/landing',
         name: 'landing',
         component: Landing
     },
@@ -16,20 +14,10 @@ export default [
         name: 'events',
         component: Events
     },
-
     {
-        path: '/about',
-        name: 'about',
-        component: About
-    },
-    {
-        path: '/login',
+        path: '/',
         name: 'login',
         component: Login
     },
-    {
-        path: '/register',
-        name: 'register',
-        component: Register
-    }
+    
 ];

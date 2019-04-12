@@ -110,7 +110,7 @@
           <div class="+pd-md +border-t-grey-1 +flex +align-items-center">
 
             <div class="+flex +align-items-center +inline">
-              <span class="+in-line +mg-r-sm +uppercase +text-med">Balance: ${{update_bankroll}} </span>
+              <span class="+in-line +mg-r-sm +uppercase +text-med">Balance: ${{end_user.bankroll}} </span>
 
             </div>
           </div>
@@ -123,7 +123,7 @@
           <div class="col-12">
               <div class="events__category-header">
                 <h2 class="+text-base +text-bold +uppercase +text-grey-6"> Open NBA Bets</h2>
-                <div class="events__count +mg-r-xs">9</div>
+                <div class="events__count +mg-r-xs">{{open_events.length}}</div>
               </div>
             </div>
           <div class="col-12">
@@ -144,7 +144,9 @@
                 <template v-for="(open, index) in open_events" >
                   <tr class="events__table-row" :key="`top-row-${index}`">
                     <td>
-                      <span class="+block +text-base +mg-b-sm"> {{open.type}}</span>
+                      <span class="+block +text-base +mg-b-sm"> {{ date(open.created)}} </span>
+                       <span class="+block +text-base +mg-b-sm"> {{dateHours(open.created)}}</span>
+
                     </td>
                     <td>
                           <span class="+block">{{ open.teamName}}</span>
@@ -157,23 +159,68 @@
                     </td>
                     <td>
                     
-                    <button class="events__pill +mg-b-xs">  <span> <grade-badge :grade="'Y'" class="+mg-r-xs" /> </span>
-             </button>
+                    <button class="events__pill +mg-b-xs" @click="confirmBet(open,end_user.bankroll)">  <grade-badge :grade="'Y'" class="+mg-r-xs" />   <span class="+text-primary +text-sm +text-bold">Yes</span> </button>
 
-                        <button class="events__pill +mg-b-xs">  <span> <grade-badge :grade="'N'" class="+mg-r-xs" />  </span>
-             </button>
+                    <button class="events__pill +mg-b-xs" @click="declineBet(open)">  <grade-badge :grade="'N'" class="+mg-r-xs" />  <span class="+text-primary +text-sm +text-bold">No</span></button>
 
                     </td>
 
                   </tr>
 
                 </template>
-
-
             </table>
             </div>
+        </div>
 
- 
+
+
+        <div class="grid events__category --no-gap">
+
+          <div class="col-12">
+              <div class="events__category-header">
+                <h2 class="+text-base +text-bold +uppercase +text-grey-6"> History of NBA Bets</h2>
+                <div class="events__count +mg-r-xs">{{history.length}}</div>
+              </div>
+            </div>
+          <div class="col-12">
+            <table class="events__table">
+              <tr class="events__table-header">
+                  <th class="+uppercase +text-sm +text-grey-6">Type</th>
+                  <th class="+uppercase +text-sm +text-grey-6">Team Name</th>
+                  <th class="+uppercase +text-sm +text-grey-6">Risk</th>
+                  <th class="+uppercase +text-sm +text-grey-6">Payout</th>
+                   <th class="+uppercase +text-sm +text-grey-6">Odds</th>
+                  <th class="+uppercase +text-sm +text-grey-6">Sucessful</th>
+                </tr>
+                <template v-for="(open, index) in history" >
+                  <tr class="events__table-row" :key="`top-row-${index}`">
+                    <td>
+                      <span class="+block +text-base +mg-b-sm"> {{open.type}}</span>
+                    </td>
+                    <td>
+                          <span class="+block">{{ open.teamName}}</span>
+                    </td>
+                    <td>
+                      <span class="+block +text-base +mg-b-sm"> {{open.risk}}</span>
+                    </td>
+                    <td>
+                      <span class="+block +text-base +mg-b-sm"> {{open.payout}}</span>
+                    </td>
+                    <td>
+                      <span class="+block +text-base +mg-b-sm"> {{open.val}}</span>
+                    </td>
+                    <td>
+                    
+                    <button class="events__pill +mg-b-xs" v-if="open.result==1">  <grade-badge :grade="'Y'" class="+mg-r-xs" /> <span class="+text-primary +text-sm +text-bold">Confirmed</span> </button>
+                    <button class="events__pill +mg-b-xs" v-if="open.result==0">  <grade-badge :grade="'N'" class="+mg-r-xs" /> <span class="+text-primary +text-sm +text-bold">Confirmed</span> </button>
+
+                    </td>
+
+                  </tr>
+
+                </template>
+            </table>
+            </div>
         </div>
         </div>
 
@@ -188,13 +235,14 @@
 <script>
 import axios from 'axios';
 import moment from 'moment';
+import VueFirestore from 'vue-firestore'
 import firebase from 'firebase';
 import TeamBadge from '@/components/team-badge';
 import BetExample from '@/components/bet-example';
 import Loader from '@/components/loader';
 import InfoBadge from '@/components/info-badge';
 import GradeBadge from '@/components/grade-badge';
-import { db } from '../main';
+import { db,firestore2 } from '../main';
 
 export default {
     // devtools = true,
@@ -209,7 +257,9 @@ export default {
         events:[],
         open_events:[],
         bankroll:null,
-        calcData: null
+        calcData: null,
+        end_user:null,
+        history:null,
     }),
     created() {
         // const events = await axios.get('/events');
@@ -217,14 +267,27 @@ export default {
         // console.log("HELLO");
         
 
+    },firestore() {
+      var user = firebase.auth().currentUser;
+      return {
+        open_events: firestore2.collection('open').where("uid", "==", user.uid),
+        history: firestore2.collection('history').where("uid", "==", user.uid),
+        end_user: firestore2.collection('users').doc(user.uid)
+
+      }
+
     },
         mounted() {
           console.log(firebase.auth().currentUser);
           var user = firebase.auth().currentUser;
           // console.log(db.collection('users'));
           console.log("legends");
-          console.log(db.collection('users').orderBy('createdAt'));
+
+          console.log("LETS GO ON A STRIKE!");
+          console.log(this.open_events);
+          // console.log(db.collection('users').orderBy('createdAt'));
           // db.collection('users').add({"Moosa":{"name":"moosa"}});
+          console.log(this.open_events);
 
           axios.get(`https://droplet.smartlines.ca/apiv2/events/`)
           .then(response => {
@@ -240,45 +303,49 @@ export default {
             this.errors.push(e)
             console.log(this.errors);
           })
-        //  this.events = await events.data;
 
-        // var openBetsRef = db.collection("open");
-        // openBetsRef.get().then(function(doc) {
-        //    openBetsRef.docs.map(doc => doc.data());
-
-        // })
-
-         const markers = [];
-           db.collection("open").where("uid", "==", user.uid).get()
-            .then(querySnapshot => {
-              querySnapshot.docs.forEach(doc => {
-              this.open_events.push(doc.data());
-            });
-          });
-          console.log(markers);
 
         }
     ,
     computed: {
-         update_bankroll() {
-            const user = firebase.auth().currentUser
-            var self = this;
-            var docRef = db.collection("users").doc(user.uid);
-            var fireRoll =0;
-            docRef.get().then(function(doc) {
-                if (doc.exists) {
-                    fireRoll = doc.data().bankroll;
-                    self.bankroll = fireRoll;
-                    console.log(  this.bankroll);
-                } else {
-                    console.log("No such document!");
-                }
-                }).catch(function(error) {
-                    console.log("Error getting document:", error);
-                });
-            return self.bankroll
-        }
+        //  update_bankroll() {
+        //     const user = firebase.auth().currentUser
+        //     var self = this;
+        //     var fireRoll = 0;
+        //     var docRef = db.collection("users").doc(user.uid);
+        //     docRef.get().then(function(doc) {
+        //         if (doc.exists) {
+        //             fireRoll = doc.data().bankroll;
+        //             self.bankroll = fireRoll;
+        //             console.log( this.bankroll);
+        //         } else {
+        //             console.log("No such document!");
+        //         }
+        //         }).catch(function(error) {
+        //             console.log("Error getting document:", error);
+        //         });
+        //     return self.bankroll
+        // }
       },
+      // update_bankroll() {
+      //       const user = firebase.auth().currentUser
+      //       var self = this;
+      //       var docRef = db.collection("users").doc(user.uid);
+      //       var fireRoll = 0;
+      //       docRef.onSnapshot().then(function(doc) {
+      //           if (doc.exists) {
+      //               fireRoll = doc.data().bankroll;
+      //               self.bankroll = fireRoll;
+      //               console.log( this.bankroll);
+      //           } else {
+      //               console.log("No such document!");
+      //           }
+      //           }).catch(function(error) {
+      //               console.log("Error getting document:", error);
+      //           });
+      //       return self.bankroll
+      //   }
+      // }
     methods: {
         isActiveTab(event, type,team,name) {
           // console.log(team);
@@ -299,24 +366,81 @@ export default {
         date(date) {
             return moment(date).format('MMM Do, YY');
         },
+        dateHours(date) {
+            return moment(date).format('HH:MM');
+        },
 
-        addBet: function (event) {
-          console.log("LOOL")
-          var docRef = db.collection("users").doc("ci4qwT3schuGrpi34JLo");
+        confirmBet: function (event,bankroll1) {
+          const user = firebase.auth().currentUser
+            var docRef2 = db.collection("history");
+            var self = this;
+            var winnings = Number(event.val)* Number(event.risk);
+            var open_key = event.keyid;
+            console.log("cloud9");
+            console.log(open_key);
+            db.collection("open").doc(open_key).delete().then(function() {
+                    console.log("Document successfully deleted!");
+                }).catch(function(error) {
+                    console.error("Error removing document: ", error);
+                });
+            docRef2.add({
+                risk: event.risk,
+                teamName: event.teamName,
+                payout: winnings,
+                type:event.type,
+                uid:event.uid,
+                val:event.val,
+                result:1,
+            })
+            .then(function(docRef) {
+                console.log("Document written with ID: ", docRef.id);
+                var new_bankroll = Math.round(Number(bankroll1) + winnings,2);
+                var user_ref = db.collection("users").doc(user.uid);
+                //update bankroll
+                return user_ref.update({
+                    bankroll: new_bankroll
+                })
+                .then(function() {
+                    console.log("Document successfully updated!");
+                })
+                .catch(function(error) {
+                    // The document probably doesn't exist.
+                    console.error("Error updating document: ", error);
+                });
 
-          docRef.get().then(function(doc) {
-              if (doc.exists) {
-                  console.log("Document data:", doc.data());
-              } else {
-                  // doc.data() will be undefined in this case
-                  console.log("No such document!");
-              }
-          }).catch(function(error) {
-              console.log("Error getting document:", error);
-          });
-
-
-    },
+            })
+            .catch(function(error) {
+                console.error("Error adding document: ", error);
+            });
+    }
+    ,declineBet: function(event) {
+            const user = firebase.auth().currentUser
+            var docRef2 = db.collection("history");
+            var self = this;
+            var winnings = 0;
+            console.log("HEY WHAT'S THE BIG IDEA??")
+            var open_key = event.keyid;
+            db.collection("open").doc(open_key).delete().then(function() {
+                    console.log("Document successfully deleted!");
+                }).catch(function(error) {
+                    console.error("Error removing document: ", error);
+                });
+            docRef2.add({
+                risk: event.risk,
+                teamName: event.teamName,
+                payout: winnings,
+                type:event.type,
+                uid:event.uid,
+                val:event.val,
+                result:0,
+            })
+            .then(function(docRef) {
+                
+            })
+            .catch(function(error) {
+                console.error("Error adding document: ", error);
+            });
+        },
     
         createChips(val) {
             this.chips = [];

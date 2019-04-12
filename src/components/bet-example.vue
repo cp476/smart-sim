@@ -140,11 +140,27 @@ export default {
                 teamName: this.payout.team,
                 risk: this.risk,
                 type:this.payout.type,
-                uid:user.uid
+                uid:user.uid,
+                keyid:"none",
+                created: Date.now()
+
+
             })
             .then(function(docRef) {
-                console.log("Document written with ID: ", docRef.id);
                 var new_bankroll = firebankroll - risk;
+                var doc_id = docRef.id;
+                var adding_keyid = db.collection("open").doc(docRef.id);
+                adding_keyid.update({
+                    keyid: doc_id
+                })
+                .then(function() {
+                    
+                })
+                .catch(function(error) {
+                    // The document probably doesn't exist.
+                    console.error("Error updating document: ", error);
+                });
+
                 var user_ref = db.collection("users").doc(user.uid);
                 return user_ref.update({
                     bankroll: new_bankroll

@@ -1,22 +1,26 @@
 import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
-import store from './store';
 import VTooltip from 'v-tooltip';
 import GlobalComponents from './components/global';
 import firebase from 'firebase';
 import 'firebase/firestore'
+import VueFirestore from 'vue-firestore'
+
 import VueFire from 'vuefire'
 
 
 
 import '../public/api';
 import './scss/index.scss';
+Vue.config.productionTip = false;
 
 Vue.use(VTooltip);
 Vue.use(GlobalComponents);
-Vue.use(VueFire)
-Vue.config.productionTip = false;
+Vue.use(VueFire);
+Vue.use(VueFirestore);
+
+
 
 var config = {
     apiKey: "AIzaSyBYSoc_s9i8lopmEhfhxQqHUf_4OovAARo",
@@ -27,10 +31,11 @@ var config = {
     messagingSenderId: "21155837719"
   };
 
-firebase.initializeApp(config);
+const firebaseapp = firebase.initializeApp(config);
 
 export const db = firebase.firestore();
 
+export const firestore2 = firebaseapp.firestore();
 
 new Vue({
     router,
